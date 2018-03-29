@@ -1,1 +1,1 @@
-# 132b_inverted_index
+# 132b_hadoop_wikipedia
