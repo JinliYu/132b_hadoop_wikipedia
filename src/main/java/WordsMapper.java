@@ -46,6 +46,9 @@ public class WordsMapper extends Mapper<LongWritable, Text, Text, Text> {
 		type.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
 		type.setStored(true);
 		type.setStoreTermVectors(true);
+		type.setStoreTermVectorOffsets(true);
+		type.setStoreTermVectorPositions(true);
+		type.setStoreTermVectorPayloads(true);
 		doc.add(new Field("title", docline[2], type));
 		doc.add(new Field("body", docline[3], type));
 //		doc.add(new Field("body", "quick fox run faster", type));
