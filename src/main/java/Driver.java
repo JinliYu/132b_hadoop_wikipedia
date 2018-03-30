@@ -23,10 +23,10 @@ public class Driver {
 //		Path inp02 = new Path(args[2]);
 
 //		if running locally, use the line below
-		Path outp = new Path(args[1]);
+//		Path outp = new Path(args[1]);
 		
 //		if running on cluster, use the line below
-//		Path outp = new Path(args[2]);
+		Path outp = new Path(args[2]);
 		
 		BasicConfigurator.configure();
 		
@@ -36,9 +36,9 @@ public class Driver {
 		job.setInputFormatClass(TextInputFormat.class);
 		FileInputFormat.setInputDirRecursive(job, true);
 //		if running locally, use the line below
-		FileInputFormat.addInputPath(job, new Path(args[0]));
+//		FileInputFormat.addInputPath(job, new Path(args[0]));
 //		if running on cluster, use the line below
-//		FileInputFormat.addInputPath(job, new Path(args[1]));
+		FileInputFormat.addInputPath(job, new Path(args[1]));
 //		TextInputFormat.addInputPath(job, inp00);
 //		TextInputFormat.addInputPath(job, inp01);
 //		TextInputFormat.addInputPath(job, inp02);
