@@ -31,7 +31,7 @@ public class Driver {
 		BasicConfigurator.configure();
 		
 		Configuration conf = new Configuration();
-		Job job = Job.getInstance(conf, "Inverted Index");
+		Job job = Job.getInstance(conf, "Document Positions");
 		
 		job.setInputFormatClass(TextInputFormat.class);
 		FileInputFormat.setInputDirRecursive(job, true);

@@ -9,3 +9,11 @@
 * scp the jar from Diadem to XCN
 * running jar on cluster
 $ yarn jar myJar.jar Driver /data/wiki_csv ./output_folder_name
+
+### Useful links
+
+[http://makble.com/what-is-term-vector-in-lucene](http://makble.com/what-is-term-vector-in-lucene)
+
+[http://makble.com/what-is-lucene-term](http://makble.com/what-is-lucene-term)
+
+[http://makble.com/how-to-do-lucene-search-highlight-example](http://makble.com/how-to-do-lucene-search-highlight-example)
