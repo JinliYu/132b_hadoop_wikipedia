@@ -9,6 +9,7 @@ import java.io.StringReader;
 
 import org.apache.lucene.analysis.en.EnglishAnalyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
+import org.apache.commons.lang.StringUtils;
 import org.apache.hadoop.io.LongWritable;
 import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Mapper;
@@ -43,18 +44,19 @@ public class WordsMapper extends Mapper<LongWritable, Text, Text, Text> {
 
 		Document doc = new Document();
 		FieldType type = new FieldType();
-		type.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+//		type.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS_AND_OFFSETS);
+		type.setIndexOptions(IndexOptions.DOCS_AND_FREQS_AND_POSITIONS);
 		type.setStored(true);
 		type.setStoreTermVectors(true);
 //		type.setStoreTermVectorOffsets(true);
 		type.setStoreTermVectorPositions(true);
 //		type.setStoreTermVectorPayloads(true);
-		doc.add(new Field("title", docline[2], type));
+//		doc.add(new Field("title", docline[2], type));
 		doc.add(new Field("body", docline[3], type));
 
 		IndexWriter indexWriter = new IndexWriter(ramDirectory, config);
 		indexWriter.addDocument(doc);
-		indexWriter.commit();
+//		indexWriter.commit();
 		indexWriter.close();
 		
 		IndexReader indexReader = DirectoryReader.open(ramDirectory);
@@ -67,30 +69,34 @@ public class WordsMapper extends Mapper<LongWritable, Text, Text, Text> {
 				PostingsEnum postings = it.postings(null, PostingsEnum.POSITIONS);
 				int doc_id = postings.nextDoc();
 				int totalFreq = postings.freq();
+				String cur_word = term.utf8ToString();
 				for (int i = 0; i < totalFreq; ++i) {
 					int cur_pos = postings.nextPosition();
-					String cur_word = term.utf8ToString();
 					
-					cur_word.trim();
-					cur_word = cur_word.replaceAll("[^.a-zA-Z0-9]", "");
-					if (cur_word.length() > 3) {
-						if (cur_word.contains("."))
+					if (cur_word.length() > 4) {
+						if (!isAlphanumeric(cur_word))
 							continue;
-						boolean repeatedchar = false;
-						for (char c = '0'; c <= '9'; c++) {
-							if (cur_word.matches(String.valueOf(c) + "+")) {
-								repeatedchar = true;
-								break;
-							}
-						}
-						if (repeatedchar) continue;
-						for (char c = 'a'; c <= 'z'; c++) {
-							if (cur_word.matches(String.valueOf(c) + "+")) {
-								repeatedchar = true;
-								break;
-							}
-						}
-						if (repeatedchar) continue;
+//					cur_word = cur_word.replaceAll("[^.a-zA-Z0-9]", "");
+//					if (cur_word.length() > 3) {
+//						if (cur_word.contains("."))
+//							continue;
+//						boolean repeatedchar = false;
+//						for (char c = '0'; c <= '9'; c++) {
+//							if (cur_word.matches(String.valueOf(c) + "+")) {
+//								repeatedchar = true;
+//								break;
+//							}
+//						}
+//						if (repeatedchar) continue;
+//						for (char c = 'a'; c <= 'z'; c++) {
+//							if (cur_word.matches(String.valueOf(c) + "+")) {
+//								repeatedchar = true;
+//								break;
+//							}
+//						}
+//						if (repeatedchar) continue;
+					
+					
 						emitValue.set("(" + "d:" + docline[0] + " p:" + cur_pos + ")");
 						context.write(new Text(cur_word), emitValue);
 					}
@@ -98,5 +104,13 @@ public class WordsMapper extends Mapper<LongWritable, Text, Text, Text> {
 				term = it.next();
 			}
 		}
+	}
+	public boolean isAlphanumeric(String str) {
+		for (int i = 0; i < str.length(); ++i) {
+			char c = str.charAt(i);
+			if (Character.isDigit(c) || (c < 'a' || c > 'z'))
+				return false;
+		}
+		return true;
 	}
 }
