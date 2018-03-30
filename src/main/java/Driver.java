@@ -1,5 +1,5 @@
 /**
- * 132B Basic inverted index
+ * 2.3 Inverted Index + Stop & Scrub Words + Document Positions
  * Group number: cs132g2
  * Group name: Yet Another Mapreduce Program (YAMP)
  * Group members: Shuai Yu, Jinli Yu, Chuanxiong Yi, Minghui Zhu
